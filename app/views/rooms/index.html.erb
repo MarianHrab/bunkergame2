@@ -1,0 +1,11 @@
+<h1>Welcome to your Dashboard</h1>
+
+<% if @rooms.present? %>
+  <p>Your rooms:</p>
+
+  <% @rooms.each do |room| %>
+    <!-- Виведення інформації про кімнати -->
+  <% end %>
+<% else %>
+    <%= link_to 'Create a Room', new_room_path %>
+<% end %>
