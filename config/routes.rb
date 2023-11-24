@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     member do
       post 'take_slot'
     end
+    delete 'destroy'
   end
 
   # Defines the root path route ("/")

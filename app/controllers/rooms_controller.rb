@@ -21,12 +21,25 @@ class RoomsController < ApplicationController
         end
       end
 
-
+      def check_owner
+        unless @room.owner == current_user
+          redirect_to @room, alert: 'You are not the owner of this room.'
+        end
+      end
+    
       def show
         @room = Room.find(params[:id])
         @players = @room.players
         @player = Player.new
       end
+
+      def destroy
+        @room = Room.find(params[:id])
+        @room.players.destroy_all
+        @room.destroy
+        redirect_to rooms_path, notice: 'Room was successfully destroyed.'
+      end
+    
     
       def take_slot
         @room = Room.find(params[:id])

@@ -7,7 +7,14 @@
     <li><%= player.user.email %></li>
   <% end %>
 </ul>
-<%= button_to 'Take Slot', take_slot_room_path(@room), method: :post %>
+<% unless @room.players.exists?(user_id: current_user.id) %>
+  <%= button_to 'Take Slot', take_slot_room_path(@room), method: :post %>
+<% end %>
 
+<% if @room.owner == current_user %>
+  <%= form_for @room, method: :delete, data: { confirm: 'Are you sure?' } do |f| %>
+    <%= f.submit 'Delete Room' %>
+  <% end %>
+<% end %>
 
 <%= link_to 'Back', rooms_path %>
