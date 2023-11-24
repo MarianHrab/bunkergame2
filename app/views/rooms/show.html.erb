@@ -1,0 +1,13 @@
+<!-- app/views/rooms/show.html.erb -->
+<h1><%= @room.name %></h1>
+
+<h2>Players</h2>
+<ul>
+  <% @players.each do |player| %>
+    <li><%= player.user.email %></li>
+  <% end %>
+</ul>
+<%= button_to 'Take Slot', take_slot_room_path(@room), method: :post %>
+
+
+<%= link_to 'Back', rooms_path %>

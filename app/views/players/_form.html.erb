@@ -1,0 +1,18 @@
+<!-- app/views/players/_form.html.erb -->
+<%= form_with(model: [room, player], url: rooms_path(room), local: true) do |form| %>
+  <% if player.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(player.errors.count, 'error') %> prohibited this player from being saved:</h2>
+
+      <ul>
+        <% player.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit 'Take Slot' %>
+  </div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_22_065312) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_22_123721) do
   create_table "action_cards", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -25,9 +25,18 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_22_065312) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "players", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "room_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_players_on_room_id"
+    t.index ["user_id"], name: "index_players_on_user_id"
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.string "name"
-    t.integer "owner_id", null: false
+    t.integer "owner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_id"], name: "index_rooms_on_owner_id"
@@ -45,5 +54,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_22_065312) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "rooms", "owners"
+  add_foreign_key "players", "rooms"
+  add_foreign_key "players", "users"
+  add_foreign_key "rooms", "users", column: "owner_id"
+  add_foreign_key "rooms", "users", column: "owner_id"
 end

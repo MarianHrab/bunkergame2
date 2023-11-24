@@ -10,23 +10,18 @@ class RoomsController < ApplicationController
       end
     
       def create
-        @room = Room.find(params[:room_id])
+        @room = Room.new(room_params)
+        @room.owner = current_user
       
-        # Check if the user already has a player in the room
-        if @room.players.exists?(user_id: current_user.id)
-          redirect_to @room, alert: 'You already have a player in this room.'
+        if @room.save
+          flash[:notice] = 'Room was successfully created.'
+          redirect_to @room
         else
-          @player = @room.players.build(player_params)
-      
-          if @player.save
-            redirect_to @room, notice: 'Player was successfully created.'
-          else
-            render :new
-          end
+          render :new
         end
       end
-      
-    
+
+
       def show
         @room = Room.find(params[:id])
         @players = @room.players
@@ -35,18 +30,24 @@ class RoomsController < ApplicationController
     
       def take_slot
         @room = Room.find(params[:id])
-        @player = @room.players.build(player_params)
-    
-        if @player.save
-          redirect_to room_path(@room), notice: 'Slot taken successfully.'
+      
+        # Перевірте, чи у користувача вже є гравець у кімнаті
+        if @room.players.exists?(user_id: current_user.id)
+          # Якщо у користувача вже є гравець у кімнаті, можливо, ви хочете вивести повідомлення або зробити щось інше
+          flash[:alert] = "You already have a player in this room."
         else
-          render :show
+          # Якщо користувач ще не має гравця у кімнаті, створіть нового гравця
+          @player = @room.players.create(user: current_user)
+          flash[:notice] = "You've taken a slot in the room."
         end
+      
+        redirect_to @room
       end
+      
     
       private
       def room_params
-        params.require(:room).permit(:name, :capacity)
+        params.require(:room).permit(:name) 
       end
       
     

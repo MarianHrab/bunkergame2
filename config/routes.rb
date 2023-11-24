@@ -12,7 +12,12 @@ Rails.application.routes.draw do
   unauthenticated do
     root 'welcome#index', as: :unauthenticated_root
   end
-  resources :rooms
+  resources :rooms do
+    member do
+      post 'take_slot'
+    end
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
