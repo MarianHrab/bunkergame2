@@ -17,6 +17,11 @@
     <%= form.text_field :name %>
   </div>
 
+  <div class="field">
+    <%= form.label :limit %>
+    <%= form.number_field :limit, min: 1, class: 'form-control' %>
+  </div>
+  
   <div class="actions">
     <%= form.submit %>
   </div>

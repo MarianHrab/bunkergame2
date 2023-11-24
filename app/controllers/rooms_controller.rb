@@ -43,24 +43,24 @@ class RoomsController < ApplicationController
     
       def take_slot
         @room = Room.find(params[:id])
-      
-        # Перевірте, чи у користувача вже є гравець у кімнаті
-        if @room.players.exists?(user_id: current_user.id)
-          # Якщо у користувача вже є гравець у кімнаті, можливо, ви хочете вивести повідомлення або зробити щось інше
-          flash[:alert] = "You already have a player in this room."
-        else
-          # Якщо користувач ще не має гравця у кімнаті, створіть нового гравця
-          @player = @room.players.create(user: current_user)
-          flash[:notice] = "You've taken a slot in the room."
+        if @room.players.count < @room.limit
+          # Перевірте, чи у користувача вже є гравець у кімнаті
+          if @room.players.exists?(user_id: current_user.id)
+            # Якщо у користувача вже є гравець у кімнаті, можливо, ви хочете вивести повідомлення або зробити щось інше
+            flash[:alert] = "You already have a player in this room."
+          else
+            # Якщо користувач ще не має гравця у кімнаті, створіть нового гравця
+            @player = @room.players.create(user: current_user)
+            flash[:notice] = "You've taken a slot in the room."
+          end
         end
-      
         redirect_to @room
       end
       
     
       private
       def room_params
-        params.require(:room).permit(:name) 
+        params.require(:room).permit(:name, :limit)
       end
       
     

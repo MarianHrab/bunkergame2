@@ -2,6 +2,7 @@
 <h1><%= @room.name %></h1>
 
 <h2>Players</h2>
+<p>Limit: <%= @room.limit %></p>
 <ul>
   <% @players.each do |player| %>
     <li><%= player.user.email %></li>
