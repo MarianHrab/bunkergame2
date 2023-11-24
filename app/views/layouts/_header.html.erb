@@ -1,0 +1,14 @@
+<!-- app/views/layouts/_header.html.erb -->
+<header style="display: flex; justify-content: space-between; align-items: center;">
+  <!-- Your header content goes here -->
+  <h1>Bunker</h1>
+  <nav style="display: flex; gap: 20px;">
+      <% if user_signed_in? %>
+        <p>Hello, <%= current_user.email %></p>
+        <%= link_to 'Logout', logout_path, method: :delete %>
+      <% else %>
+        <%= link_to "Login", new_user_session_path %>
+        <%= link_to "Register", new_user_registration_path %>
+      <% end %>
+    </nav>
+</header>

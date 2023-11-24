@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
   authenticated :user do
-    root 'dashboard#index', as: :authenticated_root
+    root 'rooms#index', as: :authenticated_root
   end
   unauthenticated do
     root 'welcome#index', as: :unauthenticated_root
@@ -18,7 +18,9 @@ Rails.application.routes.draw do
     end
     delete 'destroy'
   end
-
+  devise_scope :user do
+    get '/logout', to: 'devise/sessions#destroy', as: :logout
+  end
   # Defines the root path route ("/")
   # root "posts#index"
 end
