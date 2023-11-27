@@ -2,6 +2,10 @@ source "https://rubygems.org"
 
 ruby "3.0.2"
 
+
+gem 'faker', require: false
+
+
 #device
 gem 'devise', '~> 4.9', '>= 4.9.2'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

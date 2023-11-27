@@ -10,12 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_24_082439) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_26_093740) do
   create_table "action_cards", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "characteristics", force: :cascade do |t|
+    t.integer "age"
+    t.integer "height"
+    t.integer "weight"
+    t.string "health"
+    t.string "phobia"
+    t.string "hobby"
+    t.string "character"
+    t.string "luggage"
+    t.text "additional_info"
+    t.string "knowledge"
+    t.integer "player_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_characteristics_on_player_id"
   end
 
   create_table "condition_cards", force: :cascade do |t|
@@ -25,11 +42,28 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_24_082439) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "games", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "players", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "age"
+    t.integer "height"
+    t.integer "weight"
+    t.string "health"
+    t.string "phobia"
+    t.string "hobby"
+    t.string "character"
+    t.string "luggage"
+    t.string "additional_info"
+    t.string "knowledge"
+    t.integer "characteristic_id"
+    t.index ["characteristic_id"], name: "index_players_on_characteristic_id"
     t.index ["room_id"], name: "index_players_on_room_id"
     t.index ["user_id"], name: "index_players_on_user_id"
   end
@@ -40,6 +74,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_24_082439) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "limit"
+    t.boolean "game_started", default: false
     t.index ["owner_id"], name: "index_rooms_on_owner_id"
   end
 
@@ -55,6 +90,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_24_082439) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "characteristics", "players"
+  add_foreign_key "players", "characteristics"
   add_foreign_key "players", "rooms"
   add_foreign_key "players", "users"
   add_foreign_key "rooms", "users", column: "owner_id"

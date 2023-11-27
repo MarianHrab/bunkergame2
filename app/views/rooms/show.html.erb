@@ -5,11 +5,52 @@
 <p>Limit: <%= @room.limit %></p>
 <ul>
   <% @players.each do |player| %>
-    <li><%= player.user.email %></li>
+    <li>
+      <%= player.user.email %>
+      <% if player == current_user.players.first && player.characteristic.present? %>
+        <ul>
+          <li><strong>Age:</strong> <%= player.characteristic.age %></li>
+          <li><strong>Height:</strong> <%= player.characteristic.height %></li>
+          <li><strong>Weight:</strong> <%= player.characteristic.weight %></li>
+          <li><strong>Health:</strong> <%= player.characteristic.health %></li>
+          <li><strong>Phobia:</strong> <%= player.characteristic.phobia %></li>
+          <li><strong>Hobby:</strong> <%= player.characteristic.hobby %></li>
+          <li><strong>Character:</strong> <%= player.characteristic.character %></li>
+          <li><strong>Luggage:</strong> <%= player.characteristic.luggage %></li>
+          <li><strong>Additional Info:</strong> <%= player.characteristic.additional_info %></li>
+          <li><strong>Knowledge:</strong> <%= player.characteristic.knowledge %></li>
+        </ul>
+      <% elsif player.characteristic.present? %>
+        <!-- Показати тільки назви характеристик для інших гравців -->
+        <ul>
+          <li><strong>Age:</strong> <%= "Hidden" %></li>
+          <li><strong>Height:</strong> <%= "Hidden" %></li>
+          <li><strong>Weight:</strong> <%= "Hidden" %></li>
+          <li><strong>Health:</strong> <%= "Hidden" %></li>
+          <li><strong>Phobia:</strong> <%= "Hidden" %></li>
+          <li><strong>Hobby:</strong> <%= "Hidden" %></li>
+          <li><strong>Character:</strong> <%= "Hidden" %></li>
+          <li><strong>Luggage:</strong> <%= "Hidden" %></li>
+          <li><strong>Additional Info:</strong> <%= "Hidden" %></li>
+          <li><strong>Knowledge:</strong> <%= "Hidden" %></li>
+          <!-- Додайте інші характеристики, які вам потрібно вивести -->
+        </ul>
+      <% else %>
+        <p>No characteristics available.</p>
+      <% end %>
+    </li>
   <% end %>
 </ul>
 <% unless @room.players.exists?(user_id: current_user.id) %>
   <%= button_to 'Take Slot', take_slot_room_path(@room), method: :post %>
+<% end %>
+
+<% if @room.owner == current_user %>
+  <% if @room.players.count >= 2 %>
+    <%= button_to 'Start Game', start_game_room_path(@room), method: :post %>
+  <% else %>
+    <p>Waiting for more players to start the game...</p>
+  <% end %>
 <% end %>
 
 <% if @room.owner == current_user %>
@@ -19,3 +60,20 @@
 <% end %>
 
 <%= link_to 'Back', rooms_path %>
+
+<!-- Add this within the loop that displays players -->
+<% if player == current_user.players.first %>
+  <!-- Display characteristics for the current user -->
+  <ul>
+    <% player.opened_characteristics.each do |characteristic| %>
+      <li><strong><%= characteristic[:name] %>:</strong> <%= characteristic[:value] %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <!-- Display visible characteristics for other players -->
+  <ul>
+    <% player.visible_characteristics.each do |characteristic| %>
+      <li><strong><%= characteristic %>:</strong> <%= "Visible" %></li>
+    <% end %>
+  </ul>
+<% end %>

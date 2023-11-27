@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  age: 1
+  height: 1
+  weight: 1
+  health: MyString
+  phobia: MyString
+  hobby: MyString
+  character: MyString
+  luggage: MyString
+  additional_info: MyText
+  knowledge: MyString
+  player: one
+
+two:
+  age: 1
+  height: 1
+  weight: 1
+  health: MyString
+  phobia: MyString
+  hobby: MyString
+  character: MyString
+  luggage: MyString
+  additional_info: MyText
+  knowledge: MyString
+  player: two

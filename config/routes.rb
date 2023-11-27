@@ -15,12 +15,16 @@ Rails.application.routes.draw do
   resources :rooms do
     member do
       post 'take_slot'
+      post 'start_game'
     end
     delete 'destroy'
   end
+
   devise_scope :user do
     get '/logout', to: 'devise/sessions#destroy', as: :logout
   end
   # Defines the root path route ("/")
   # root "posts#index"
+  post '/toggle_visibility/:characteristic_name', to: 'players#toggle_visibility', as: :toggle_visibility
+
 end

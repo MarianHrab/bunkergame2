@@ -1,6 +1,6 @@
 class Room < ApplicationRecord
   belongs_to :owner, class_name: 'User'
-  has_many :players
+  has_many :players, dependent: :destroy
   has_many :users, through: :players
 
   validates :name, presence: true
