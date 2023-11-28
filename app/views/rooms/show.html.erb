@@ -9,31 +9,33 @@
       <%= player.user.email %>
       <% if player == current_user.players.first && player.characteristic.present? %>
         <ul>
-          <li><strong>Age:</strong> <%= player.characteristic.age %></li>
-          <li><strong>Height:</strong> <%= player.characteristic.height %></li>
-          <li><strong>Weight:</strong> <%= player.characteristic.weight %></li>
-          <li><strong>Health:</strong> <%= player.characteristic.health %></li>
-          <li><strong>Phobia:</strong> <%= player.characteristic.phobia %></li>
-          <li><strong>Hobby:</strong> <%= player.characteristic.hobby %></li>
-          <li><strong>Character:</strong> <%= player.characteristic.character %></li>
-          <li><strong>Luggage:</strong> <%= player.characteristic.luggage %></li>
-          <li><strong>Additional Info:</strong> <%= player.characteristic.additional_info %></li>
-          <li><strong>Knowledge:</strong> <%= player.characteristic.knowledge %></li>
+        <% player.characteristic.attributes.each do |name, value| %>
+          <li>
+            <strong><%= name.titleize %>:</strong>
+            <% if player == current_user.players.first %>
+              <%= value %>
+            <% elsif player.visible_characteristics&.include?(name) %>
+              <%= value %>
+            <% else %>
+              <%= "Hidden" %>
+            <% end %>
+          </li>
+        <% end %>
         </ul>
       <% elsif player.characteristic.present? %>
         <!-- Показати тільки назви характеристик для інших гравців -->
         <ul>
-          <li><strong>Age:</strong> <%= "Hidden" %></li>
-          <li><strong>Height:</strong> <%= "Hidden" %></li>
-          <li><strong>Weight:</strong> <%= "Hidden" %></li>
-          <li><strong>Health:</strong> <%= "Hidden" %></li>
-          <li><strong>Phobia:</strong> <%= "Hidden" %></li>
-          <li><strong>Hobby:</strong> <%= "Hidden" %></li>
-          <li><strong>Character:</strong> <%= "Hidden" %></li>
-          <li><strong>Luggage:</strong> <%= "Hidden" %></li>
-          <li><strong>Additional Info:</strong> <%= "Hidden" %></li>
-          <li><strong>Knowledge:</strong> <%= "Hidden" %></li>
-          <!-- Додайте інші характеристики, які вам потрібно вивести -->
+          <% player.characteristic.attributes.each do |name, value| %>
+            <li>
+              <strong><%= name.titleize %>:</strong>
+              <% if player.visible_characteristics&.include?(name) %>
+                <%= value %>
+              <% else %>
+                <%= "Hidden" %>
+                &#128274;
+              <% end %>
+            </li>
+          <% end %>
         </ul>
       <% else %>
         <p>No characteristics available.</p>
@@ -60,20 +62,3 @@
 <% end %>
 
 <%= link_to 'Back', rooms_path %>
-
-<!-- Add this within the loop that displays players -->
-<% if player == current_user.players.first %>
-  <!-- Display characteristics for the current user -->
-  <ul>
-    <% player.opened_characteristics.each do |characteristic| %>
-      <li><strong><%= characteristic[:name] %>:</strong> <%= characteristic[:value] %></li>
-    <% end %>
-  </ul>
-<% else %>
-  <!-- Display visible characteristics for other players -->
-  <ul>
-    <% player.visible_characteristics.each do |characteristic| %>
-      <li><strong><%= characteristic %>:</strong> <%= "Visible" %></li>
-    <% end %>
-  </ul>
-<% end %>
