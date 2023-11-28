@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     member do
       post 'take_slot'
       post 'start_game'
+      post 'toggle_visibility'
     end
     delete 'destroy'
   end

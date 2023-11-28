@@ -1,0 +1,20 @@
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Toggle visibility executed");
+
+  // Отримуємо ім'я характеристики та приналежність гравця
+  var characteristicName = '<%= params[:characteristic_name] %>';
+  var isOwner = <%= @room.owner == current_user %>;
+
+  // Шукаємо елемент характеристики за ім'ям
+  var characteristicElement = document.querySelector('[data-characteristic-name="' + characteristicName + '"]');
+
+  // Якщо гравець є власником кімнати і гра розпочалася, міняємо видимість характеристики
+  if (isOwner && <%= @room.game_started %> && characteristicElement) {
+    var currentVisibility = characteristicElement.dataset.visibility;
+    var newVisibility = currentVisibility === 'true' ? 'false' : 'true';
+
+    // Змінюємо атрибут dataset та оновлюємо відображення
+    characteristicElement.dataset.visibility = newVisibility;
+    characteristicElement.innerHTML = newVisibility === 'true' ? '<%= j value %>' : 'Hidden &#128274;';
+  }
+});

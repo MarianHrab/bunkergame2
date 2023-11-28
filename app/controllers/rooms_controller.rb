@@ -32,6 +32,8 @@ class RoomsController < ApplicationController
         @room = Room.find(params[:id])
         @players = @room.players.includes(:characteristic)
         @player = Player.new
+        city_name = 'Kyiv'
+        @weather_info = OpenWeatherMapService.weather_for_city(city_name)
       end
 
       def destroy
@@ -104,6 +106,30 @@ class RoomsController < ApplicationController
         characteristics_to_open.first(2).each do |characteristic|
           player.opened_characteristics << { name: characteristic, value: generate_random_value_for(characteristic) }
           player.visible_characteristics << characteristic
+        end
+      end
+      
+      def toggle_visibility
+        @room = Room.find(params[:id])
+        characteristic_name = params[:name]
+      
+        if current_user == @room.owner && @room.game_started
+          player = @room.players.find_by(user_id: current_user.id)
+      
+          if player.present?
+            visible_characteristics = player.visible_characteristics || []
+            if visible_characteristics.include?(characteristic_name)
+              visible_characteristics -= [characteristic_name]
+            else
+              visible_characteristics += [characteristic_name]
+            end
+      
+            player.update(visible_characteristics: visible_characteristics)
+          end
+        end
+      
+        respond_to do |format|
+          format.js
         end
       end
       

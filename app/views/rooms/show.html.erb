@@ -9,32 +9,39 @@
       <%= player.user.email %>
       <% if player == current_user.players.first && player.characteristic.present? %>
         <ul>
-        <% player.characteristic.attributes.each do |name, value| %>
-          <li>
-            <strong><%= name.titleize %>:</strong>
-            <% if player == current_user.players.first %>
-              <%= value %>
-            <% elsif player.visible_characteristics&.include?(name) %>
-              <%= value %>
-            <% else %>
-              <%= "Hidden" %>
+          <% player.characteristic.attributes.each do |name, value| %>
+            <% unless ['id', 'created_at', 'updated_at', 'player_id'].include?(name) %>
+              <li>
+                <strong><%= name.titleize %>:</strong>
+                <% if player == current_user.players.first %>
+                  <%= value %>
+                <% elsif player.visible_characteristics&.include?(name) %>
+                  <%= value %>
+                <% else %>
+                  <%= "Hidden" %>
+                  <%= link_to '&#128274;'.html_safe, toggle_visibility_room_path(@room, name: name), remote: true %>
+                <% end %>
+              </li>
             <% end %>
-          </li>
-        <% end %>
+          <% end %>
         </ul>
       <% elsif player.characteristic.present? %>
         <!-- Показати тільки назви характеристик для інших гравців -->
         <ul>
           <% player.characteristic.attributes.each do |name, value| %>
-            <li>
-              <strong><%= name.titleize %>:</strong>
-              <% if player.visible_characteristics&.include?(name) %>
-                <%= value %>
-              <% else %>
-                <%= "Hidden" %>
-                &#128274;
-              <% end %>
-            </li>
+            <% unless ['id', 'created_at', 'updated_at', 'player_id'].include?(name) %>
+              <li>
+                <strong><%= name.titleize %>:</strong>
+                <% if player.visible_characteristics&.include?(name) %>
+                  <%= value %>
+                <% else %>
+                  <%= "Hidden" %>
+                  <% if current_user == player.user %>
+                    <%= link_to '&#128274;'.html_safe, toggle_visibility_room_path(@room, name: name), remote: true %>
+                  <% end %>
+                <% end %>
+              </li>
+            <% end %>
           <% end %>
         </ul>
       <% else %>
@@ -62,3 +69,11 @@
 <% end %>
 
 <%= link_to 'Back', rooms_path %>
+
+<h1>Weather Information</h1>
+<% if @weather_info.present? %>
+  <p>Temperature: <%= (@weather_info['main']['temp'] - 273.15).round %> °C</p>
+  <p>Humidity: <%= @weather_info['main']['humidity'] %> %</p>
+<% else %>
+  <p>No weather information available.</p>
+<% end %>
