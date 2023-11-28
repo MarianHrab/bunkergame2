@@ -9,14 +9,16 @@ Rails.application.routes.draw do
   authenticated :user do
     root 'rooms#index', as: :authenticated_root
   end
+  
   unauthenticated do
     root 'welcome#index', as: :unauthenticated_root
   end
+
   resources :rooms do
     member do
       post 'take_slot'
       post 'start_game'
-      post 'toggle_visibility'
+      post 'open_characteristics_for_player'
     end
     delete 'destroy'
   end

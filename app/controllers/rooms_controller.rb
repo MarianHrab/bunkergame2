@@ -95,19 +95,25 @@ class RoomsController < ApplicationController
       end
       
       
-      def open_characteristics(player)
-        # Check if opened_characteristics is nil or if all characteristics are opened
-        if player.opened_characteristics.nil? || player.opened_characteristics.count >= all_characteristics.count
-          player.update(opened_characteristics: [])
+      def open_characteristics_for_player
+        @room = Room.find(params[:id])
+        player_id = params[:player_id]
+      
+        # Перевірка чи гравець, якого хочуть відкрити, є у кімнаті та чи він відноситься до поточного користувача
+        player_to_open = @room.players.find_by(id: player_id, user_id: current_user.id)
+      
+        if player_to_open
+          # Відкрийте характеристики для гравця
+          open_characteristics(player_to_open)
+          flash[:notice] = "Characteristics opened for the selected player."
+        else
+          flash[:alert] = "Unable to open characteristics for the selected player."
         end
       
-        # Open the next two characteristics for the player
-        characteristics_to_open = all_characteristics - player.opened_characteristics
-        characteristics_to_open.first(2).each do |characteristic|
-          player.opened_characteristics << { name: characteristic, value: generate_random_value_for(characteristic) }
-          player.visible_characteristics << characteristic
-        end
+        redirect_to @room
       end
+      
+      
       
       def toggle_visibility
         @room = Room.find(params[:id])

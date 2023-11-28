@@ -19,7 +19,6 @@
                   <%= value %>
                 <% else %>
                   <%= "Hidden" %>
-                  <%= link_to '&#128274;'.html_safe, toggle_visibility_room_path(@room, name: name), remote: true %>
                 <% end %>
               </li>
             <% end %>
@@ -36,9 +35,7 @@
                   <%= value %>
                 <% else %>
                   <%= "Hidden" %>
-                  <% if current_user == player.user %>
-                    <%= link_to '&#128274;'.html_safe, toggle_visibility_room_path(@room, name: name), remote: true %>
-                  <% end %>
+                  &#128274;
                 <% end %>
               </li>
             <% end %>
@@ -69,6 +66,22 @@
 <% end %>
 
 <%= link_to 'Back', rooms_path %>
+
+
+
+<h2>Open Characteristics for Other Players</h2>
+<ul>
+  <% @players.each do |player| %>
+    <% unless player == current_user.players.first %>
+      <li>
+        <%= player.user.email %>
+        <%= button_to 'Open Characteristics', open_characteristics_for_player_room_path(@room, player_id: player.id), method: :post, remote: true %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+
+
 
 <h1>Weather Information</h1>
 <% if @weather_info.present? %>
