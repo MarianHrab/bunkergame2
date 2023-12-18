@@ -1,6 +1,12 @@
-<!-- app/views/welcome/index.html.erb -->
-
-<h1>Welcome to Our Bunker Game!</h1>
-<p>This is the landing page for users who are not logged in.</p>
-<p>Please sign in or register to access the dashboard.</p>
-<%= link_to 'Sign In', new_user_session_path, class: 'btn btn-primary' %>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-6 mx-auto">
+      <div class="border border-3 border-f2b705 p-4 rounded text-center">
+        <h1 style="color: #F2B705;">Welcome to Our Bunker Game!</h1>
+        <p>This is the landing page for users who are not logged in.</p>
+        <p>Please sign in or register to access the dashboard.</p>
+        <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-warning btn-lg mb-3 mt-3 text-dark d-flex align-items-center justify-content-center mx-auto', style: 'width: 287px; height: 80px; font-weight: bold; font-size: 24px; border-radius: 50px; display: block;' %>
+      </div>
+    </div>
+  </div>
+</div>

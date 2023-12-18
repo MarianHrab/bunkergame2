@@ -5,16 +5,17 @@
   </div>
   <nav>
     <a href="/rooms">Rooms</a>
-    <a href="/profile">Profile</a>
+    <% if user_signed_in? %>
+      <a href="/profile">Profile</a>
+    <% end %>
     <a href="/contacts">Contacts</a>
     <a href="/rules">Rules</a>
   </nav>
   <div class="auth-button">
     <% if user_signed_in? %>
-      <%= link_to 'Logout', logout_path, method: :delete, class: "auth-button" %>
+      <%= link_to 'Logout', logout_path, method: :delete, class: "btn btn-primary btn-warning btn-sm" %>
     <% else %>
-      <%= link_to "Login", new_user_session_path, class: "auth-button" %>
-      <%= link_to "Register", new_user_registration_path, class: "auth-button" %>
+      <%= link_to "Login", new_user_session_path, class: "btn btn-primary btn-warningTurn Status: waiting_for_characteristic btn-sm" %>
     <% end %>
   </div>
 </header>
